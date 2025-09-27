@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KESSI Security Agency</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: 'Futura', 'Futura PT', 'Avenir', 'Century Gothic', sans-serif;
+            background-color: #111827; /* Dark background */
+            color: #F3F4F6; /* Light text */
+        }
+        .hero-carousel .carousel-item {
+            display: none;
+            transition: opacity 1s ease-in-out;
+        }
+        .hero-carousel .carousel-item.active {
+            display: block;
+        }
+        .section-divider {
+            border-bottom: 1px solid #374151; /* Gray border */
+            margin: 4rem 0;
+        }
+        .service-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        /* Navigation link styling */
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #FF8C00;
+        }
+        .nav-link.active {
+            color: #FF8C00;
+            font-weight: 600;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+        }
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            background: #1F2937;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease-out;
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #F3F4F6;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        .modal-close:hover {
+            background: rgba(255, 140, 0, 0.8);
+            transform: scale(1.1);
+        }
+        .modal-video {
+            width: 80vw;
+            height: 45vw;
+            max-width: 1200px;
+            max-height: 675px;
+        }
+        .modal-image {
+            max-width: 90vw;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+        .modal-info {
+            padding: 20px;
+            color: #F3F4F6;
+        }
+        .clickable-item {
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .clickable-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 140, 0, 0.3);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+
+    <!-- Header -->
+    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-700 shadow-lg">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <img src="assets/img/kessi-logo-sm.png" alt="KESSI Logo" class="h-12 w-auto object-contain" style="max-height:48px;">
+                <a href="#" class="text-2xl font-bold text-white">KESSI</a>
+            </div>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="nav-link text-gray-300">Home</a>
+                <a href="#services" class="nav-link text-gray-300">Services</a>
+                <a href="#about" class="nav-link text-gray-300">About KESSI</a>
+                <a href="#kessi-in-action" class="nav-link text-gray-300">KESSI In Action</a>
+                <!-- Careers Dropdown -->
+                <div class="relative group">
+                    <button class="nav-link text-gray-300 flex items-center focus:outline-none">
+                        Careers
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="absolute hidden group-hover:block bg-gray-800 shadow-lg rounded-md py-2 w-48 z-50">
+                        <a href="#training" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Training</a>
+                        <a href="#requirements" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Requirements</a>
+                        <a href="#apply" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Apply Online</a>
+                    </div>
+                </div>
+                <a href="#contact" class="nav-link text-gray-300">Contact Us</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-gray-300 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#home" class="block py-2 text-gray-300 hover:bg-gray-700 rounded px-2">Home</a>
+            <a href="#services" class="block py-2 text-gray-300 hover:bg-gray-700 rounded px-2">Services</a>
+            <a href="#about" class="block py-2 text-gray-300 hover:bg-gray-700 rounded px-2">About KESSI</a>
+            <a href="#kessi-in-action" class="block py-2 text-gray-300 hover:bg-gray-700 rounded px-2">KESSI In Action</a>
+            <!-- Careers Mobile Submenu -->
+            <div>
+                <button id="mobile-careers-button" class="w-full flex justify-between items-center py-2 text-gray-300 hover:bg-gray-700 rounded px-2">
+                    <span>Careers</span>
+                    <svg id="mobile-careers-arrow" class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div id="mobile-careers-submenu" class="hidden pl-4 mt-2 space-y-2">
+                    <a href="#training" class="block py-2 text-gray-300 hover:bg-gray-700 rounded px-2">Training</a>
+                    <a href="#requirements" class="block py-2 text-gray-300 hover:bg-gray-700 rounded px-2">Requirements</a>
+                    <a href="#apply" class="block py-2 text-gray-300 hover:bg-gray-700 rounded px-2">Apply Online</a>
+                </div>
+            </div>
+            <a href="#contact" class="block py-2 text-gray-300 hover:bg-gray-700 rounded px-2">Contact Us</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="relative h-[80vh] min-h-[500px] w-full overflow-hidden">
+            <div class="hero-carousel relative h-full">
+                <!-- Carousel Item 1 -->
+                <div class="carousel-item active h-full">
+                    <img src="assets/img/guardwithuniform1.jpg" alt="Security Operations" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center">
+                        <div class="text-center text-white p-4">
+                            <h1 class="text-4xl md:text-6xl font-black uppercase tracking-wider">Vigilance & Protection</h1>
+                            <p class="mt-4 text-lg md:text-xl max-w-2xl">Providing elite security solutions tailored to your unique needs. Your safety is our mission.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Carousel Item 2 -->
+                <div class="carousel-item h-full">
+                    <img src="assets/img/guardwithuniform5.jpg" alt="Advanced Surveillance" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center">
+                        <div class="text-center text-white p-4">
+                            <h1 class="text-4xl md:text-6xl font-black uppercase tracking-wider">24/7 Surveillance</h1>
+                            <p class="mt-4 text-lg md:text-xl max-w-2xl">State-of-the-art technology ensuring constant monitoring and rapid response.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Carousel Item 3 -->
+                <div class="carousel-item h-full">
+                    <img src="assets/img/kessi-guard3.jpg" alt="Expert Security Personnel" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center">
+                        <div class="text-center text-white p-4">
+                            <h1 class="text-4xl md:text-6xl font-black uppercase tracking-wider">Highly Trained Agents</h1>
+                            <p class="mt-4 text-lg md:text-xl max-w-2xl">Our personnel are rigorously trained to handle any situation with professionalism and discretion.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Carousel Controls -->
+            <button id="prevBtn" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full transition-colors">
+                &#10094;
+            </button>
+            <button id="nextBtn" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full transition-colors">
+                &#10095;
+            </button>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="container mx-auto px-6 py-12">
+            <div class="text-center">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4">See KESSI Security in Action</h2>
+                <p class="text-gray-400 mb-8 max-w-2xl mx-auto">Witness our professional security operations, training exercises, and real-world scenarios that showcase our commitment to excellence.</p>
+                <a href="#kessi-in-action" class="inline-flex items-center px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-lg transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                    </svg>
+                    Watch KESSI In Action
+                </a>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Services Section -->
+        <section id="services" class="container mx-auto px-6 py-16">
+            <h2 class="text-3xl font-bold text-center mb-12">Our Core Services</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="service-card bg-gray-800 rounded-lg overflow-hidden text-center p-8">
+                    <img src="assets/img/kessi-guard4.jpg" alt="Threat Assessment" class="w-full h-48 object-cover rounded-md mb-6">
+                    <h3 class="text-xl font-bold mb-2">Threat Assessment</h3>
+                    <p class="text-gray-400">Identify potential risks and vulnerabilities in your environment to implement effective preventive measures before issues arise.</p>
+                </div>
+                <!-- Service 2 -->
+                <div class="service-card bg-gray-800 rounded-lg overflow-hidden text-center p-8">
+                    <img src="assets/img/guardwithuniform2.jpg" alt="Threat Assessment" class="w-full h-48 object-cover rounded-md mb-6">
+                    <h3 class="text-xl font-bold mb-2">24/7 On-Site Protection</h3>
+                    <p class="text-gray-400">Provide highly trained security personnel for round-the-clock monitoring, patrols, and rapid response to incidents.</p>
+                </div>
+                <!-- Service 3 -->
+                <div class="service-card bg-gray-800 rounded-lg overflow-hidden text-center p-8">
+                    <img src="assets/img/guardwithuniform3.jpg" alt="Threat Assessment" class="w-full h-48 object-cover rounded-md mb-6">
+                    <h3 class="text-xl font-bold mb-2">Emergency Response Planning</h3>
+                    <p class="text-gray-400">Develop and execute customized response plans to ensure swift action during crises, minimizing harm and ensuring safety.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- About KESSI Section -->
+        <section id="about" class="container mx-auto px-6 py-16">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2">
+                     <img src="assets/img/guardwithuniform4.jpg" alt="About KESSI" class="rounded-lg shadow-2xl">
+                </div>
+                <div class="md:w-1/2">
+                    <h2 class="text-3xl font-bold mb-4">About KESSI</h2>
+                    <p class="text-gray-400 mb-4">Founded on the principles of integrity, vigilance, and excellence, KESSI has become a trusted name in the security industry. Our team is composed of former military, law enforcement, and intelligence professionals who bring a wealth of experience to every operation.</p>
+                    <p class="text-gray-400">We are committed to providing our clients with the highest level of security services, utilizing a combination of highly trained personnel and advanced technology to ensure the safety and security of those we protect.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- KESSI In Action Section -->
+        <section id="kessi-in-action" class="container mx-auto px-6 py-16">
+            <h2 class="text-3xl font-bold text-center mb-12">KESSI In Action</h2>
+            
+            <!-- Videos Section -->
+            <div class="mb-16">
+                <h3 class="text-2xl font-bold text-center mb-8">Training & Operations Videos</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Video Placeholder 1 -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden clickable-item" 
+                         data-type="video" 
+                         data-title="Security Training Exercise" 
+                         data-description="Watch our agents undergo intensive tactical training scenarios."
+                         data-src="placeholder">
+                        <div class="relative aspect-video bg-gray-700 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="w-16 h-16 mx-auto mb-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                </svg>
+                                <p class="text-gray-400 text-sm">Click to Watch</p>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="text-lg font-semibold mb-2">Security Training Exercise</h4>
+                            <p class="text-gray-400 text-sm">Watch our agents undergo intensive tactical training scenarios.</p>
+                        </div>
+                    </div>
+
+                    <!-- Video Placeholder 2 -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden clickable-item" 
+                         data-type="video" 
+                         data-title="Emergency Response Demo" 
+                         data-description="See how our team responds to emergency situations with precision."
+                         data-src="placeholder">
+                        <div class="relative aspect-video bg-gray-700 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="w-16 h-16 mx-auto mb-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                </svg>
+                                <p class="text-gray-400 text-sm">Click to Watch</p>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="text-lg font-semibold mb-2">Emergency Response Demo</h4>
+                            <p class="text-gray-400 text-sm">See how our team responds to emergency situations with precision.</p>
+                        </div>
+                    </div>
+
+                    <!-- Video Placeholder 3 -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden clickable-item" 
+                         data-type="video" 
+                         data-title="Surveillance Operations" 
+                         data-description="Advanced surveillance techniques and equipment demonstration."
+                         data-src="placeholder">
+                        <div class="relative aspect-video bg-gray-700 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="w-16 h-16 mx-auto mb-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                </svg>
+                                <p class="text-gray-400 text-sm">Click to Watch</p>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="text-lg font-semibold mb-2">Surveillance Operations</h4>
+                            <p class="text-gray-400 text-sm">Advanced surveillance techniques and equipment demonstration.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Photos Section -->
+            <div>
+                <h3 class="text-2xl font-bold text-center mb-8">Photo Gallery</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- Photo Placeholder 1 -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden aspect-square clickable-item" 
+                         data-type="photo" 
+                         data-title="Training Session" 
+                         data-description="KESSI agents in tactical training"
+                         data-src="placeholder">
+                        <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="w-12 h-12 mx-auto mb-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <p class="text-gray-400 text-xs">Click to View</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo Placeholder 2 -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden aspect-square clickable-item" 
+                         data-type="photo" 
+                         data-title="Security Equipment" 
+                         data-description="Advanced surveillance technology"
+                         data-src="placeholder">
+                        <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="w-12 h-12 mx-auto mb-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <p class="text-gray-400 text-xs">Click to View</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo Placeholder 3 -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden aspect-square clickable-item" 
+                         data-type="photo" 
+                         data-title="Team Formation" 
+                         data-description="KESSI agents in formation"
+                         data-src="placeholder">
+                        <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="w-12 h-12 mx-auto mb-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <p class="text-gray-400 text-xs">Click to View</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo Placeholder 4 -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden aspect-square clickable-item" 
+                         data-type="photo" 
+                         data-title="Control Room" 
+                         data-description="24/7 monitoring center"
+                         data-src="placeholder">
+                        <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="w-12 h-12 mx-auto mb-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <p class="text-gray-400 text-xs">Click to View</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo Placeholder 5 -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden aspect-square clickable-item" 
+                         data-type="photo" 
+                         data-title="Field Operations" 
+                         data-description="Agents on patrol duty"
+                         data-src="placeholder">
+                        <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="w-12 h-12 mx-auto mb-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <p class="text-gray-400 text-xs">Click to View</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo Placeholder 6 -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden aspect-square clickable-item" 
+                         data-type="photo" 
+                         data-title="Emergency Drill" 
+                         data-description="Response training exercise"
+                         data-src="placeholder">
+                        <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="w-12 h-12 mx-auto mb-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <p class="text-gray-400 text-xs">Click to View</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo Placeholder 7 -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden aspect-square clickable-item" 
+                         data-type="photo" 
+                         data-title="Security Briefing" 
+                         data-description="Team coordination meeting"
+                         data-src="placeholder">
+                        <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="w-12 h-12 mx-auto mb-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <p class="text-gray-400 text-xs">Click to View</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo Placeholder 8 -->
+                    <div class="bg-gray-800 rounded-lg overflow-hidden aspect-square clickable-item" 
+                         data-type="photo" 
+                         data-title="Graduation Ceremony" 
+                         data-description="New agent certification"
+                         data-src="placeholder">
+                        <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="w-12 h-12 mx-auto mb-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <p class="text-gray-400 text-xs">Click to View</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="section-divider"></div>
+        
+        <!-- Careers Section -->
+        <section id="careers" class="container mx-auto px-6 py-16">
+            <h2 class="text-3xl font-bold text-center mb-12">Join Our Team</h2>
+            <div class="max-w-3xl mx-auto space-y-12">
+                <div id="training">
+                    <h3 class="text-2xl font-bold mb-4">Our Training Programs</h3>
+                    <p class="text-gray-400">Our agents undergo rigorous, continuous training programs that exceed industry standards. We cover tactical skills, de-escalation techniques, emergency medical response, and advanced surveillance technology to ensure our team is prepared for any scenario.</p>
+                </div>
+                <div id="requirements">
+                    <h3 class="text-2xl font-bold mb-4">Candidate Requirements</h3>
+                    <p class="text-gray-400">We seek candidates with a background in military, law enforcement, or a related field. A high level of physical fitness, impeccable integrity, and the ability to operate under pressure are essential. All applicants must pass a comprehensive background check and psychological evaluation.</p>
+                </div>
+                <div id="apply">
+                    <h3 class="text-2xl font-bold mb-4">Apply Online</h3>
+                    <p class="text-gray-400">Ready to take the next step? Our application process is handled securely online. Please prepare your resume and relevant certifications. We will review your application and contact qualified candidates for the next phase.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Contact Section -->
+        <section id="contact" class="container mx-auto px-6 py-16">
+            <h2 class="text-3xl font-bold text-center mb-12">Get in Touch</h2>
+            <div class="max-w-2xl mx-auto bg-gray-800 p-8 rounded-lg">
+                <!-- Status Message -->
+                <div id="statusMessage" class="hidden mb-6 p-4 rounded-lg text-center font-medium"></div>
+                
+                <form id="contactForm">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="mb-4">
+                            <label for="from_name" class="block mb-2 text-sm font-medium text-gray-300">Your Name</label>
+                            <input type="text" id="from_name" name="from_name" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="John Doe" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="from_email" class="block mb-2 text-sm font-medium text-gray-300">Your Email</label>
+                            <input type="email" id="from_email" name="from_email" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="name@company.com" required>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <label for="message" class="block mb-2 text-sm font-medium text-gray-300">Your Message</label>
+                        <textarea id="message" name="message" rows="4" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="How can we help you?" required></textarea>
+                    </div>
+                    <button type="submit" id="submitBtn" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center transition-colors">
+                        <span id="submitText">Send Message</span>
+                        <span id="submitLoader" class="hidden">Sending...</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal -->
+    <div id="mediaModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="modalClose">&times;</span>
+            <div id="modalBody">
+                <!-- Content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <p class="text-lg font-semibold">KESSI Security Agency</p>
+                    <p class="text-sm text-gray-400">Your safety, our priority.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <!-- Facebook Icon -->
+                    <a href="https://www.facebook.com/KESSI801?mibextid=wwXIfr" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors">
+                        <span class="sr-only">Facebook</span>
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                    <!-- Twitter Icon -->
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <span class="sr-only">Twitter</span>
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                        </svg>
+                    </a>
+                    <!-- LinkedIn Icon -->
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <span class="sr-only">LinkedIn</span>
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-4 text-center text-gray-500 text-sm">
+                &copy; 2024 KESSI. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        // Initialize EmailJS
+        (function() {
+            emailjs.init({
+                publicKey: 'SQCo6BfO7Q__pl3ju', // Replace with your EmailJS public key
+            });
+        })();
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Mobile careers submenu toggle
+        const mobileCareersButton = document.getElementById('mobile-careers-button');
+        const mobileCareersSubmenu = document.getElementById('mobile-careers-submenu');
+        const mobileCareersArrow = document.getElementById('mobile-careers-arrow');
+        mobileCareersButton.addEventListener('click', () => {
+            mobileCareersSubmenu.classList.toggle('hidden');
+            mobileCareersArrow.classList.toggle('rotate-180');
+        });
+
+        // Hero Carousel
+        const slides = document.querySelectorAll('.carousel-item');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlide = 0;
+        const slideCount = slides.length;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[n].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slideCount;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+            showSlide(currentSlide);
+        }
+
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        // Auto-play carousel
+        let slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+
+        // Contact form submission
+        const contactForm = document.getElementById('contactForm');
+        const statusMessage = document.getElementById('statusMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        const submitLoader = document.getElementById('submitLoader');
+
+        function showMessage(message, isSuccess) {
+            statusMessage.textContent = message;
+            statusMessage.className = `mb-6 p-4 rounded-lg text-center font-medium ${
+                isSuccess 
+                ? 'bg-green-600 text-white' 
+                : 'bg-red-600 text-white'
+            }`;
+            statusMessage.classList.remove('hidden');
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.classList.add('hidden');
+            }, 5000);
+        }
+
+        function setButtonLoading(loading) {
+            if (loading) {
+                submitBtn.disabled = true;
+                submitText.classList.add('hidden');
+                submitLoader.classList.remove('hidden');
+                submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+            } else {
+                submitBtn.disabled = false;
+                submitText.classList.remove('hidden');
+                submitLoader.classList.add('hidden');
+                submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            setButtonLoading(true);
+            
+            // Replace these with your actual EmailJS service ID, template ID, and public key
+            const serviceID = 'service_9aoejdz';
+            const templateID = 'contacts';
+            
+            emailjs.sendForm(serviceID, templateID, this)
+                .then(() => {
+                    showMessage('Thank you! Your message has been sent successfully.', true);
+                    contactForm.reset();
+                })
+                .catch((error) => {
+                    console.error('EmailJS error:', error);
+                    showMessage('Sorry, there was an error sending your message. Please try again.', false);
+                })
+                .finally(() => {
+                    setButtonLoading(false);
+                });
+        });
+
+        // Active navigation highlighting
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+            const mobileNavLinks = document.querySelectorAll('#mobile-menu a[href^="#"]');
+            
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                if (window.scrollY >= sectionTop - 200) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            // Update desktop navigation
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Update mobile navigation
+            mobileNavLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Listen for scroll events
+        window.addEventListener('scroll', updateActiveNav);
+        
+        // Set initial active state
+        updateActiveNav();
+
+        // Modal functionality
+        const modal = document.getElementById('mediaModal');
+        const modalBody = document.getElementById('modalBody');
+        const modalClose = document.getElementById('modalClose');
+
+        function openModal(type, title, description, src) {
+            let content = '';
+            
+            if (type === 'video') {
+                if (src === 'placeholder') {
+                    // Placeholder video content
+                    content = `
+                        <div class="modal-video bg-gray-800 flex items-center justify-center">
+                            <div class="text-center text-white p-8">
+                                <svg class="w-24 h-24 mx-auto mb-6 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                </svg>
+                                <h3 class="text-2xl font-bold mb-4">${title}</h3>
+                                <p class="text-gray-400 mb-4">${description}</p>
+                                <p class="text-orange-400">Video content coming soon!</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Real video content (for future use)
+                    content = `
+                        <video class="modal-video" controls autoplay>
+                            <source src="${src}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="modal-info">
+                            <h3 class="text-xl font-bold mb-2">${title}</h3>
+                            <p class="text-gray-400">${description}</p>
+                        </div>
+                    `;
+                }
+            } else if (type === 'photo') {
+                if (src === 'placeholder') {
+                    // Placeholder photo content
+                    content = `
+                        <div class="modal-image bg-gray-800 flex items-center justify-center p-16">
+                            <div class="text-center text-white">
+                                <svg class="w-32 h-32 mx-auto mb-6 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <h3 class="text-2xl font-bold mb-4">${title}</h3>
+                                <p class="text-gray-400 mb-4">${description}</p>
+                                <p class="text-orange-400">Photo coming soon!</p>
+                            </div>
+                        </div>
+                        <div class="modal-info">
+                            <h3 class="text-xl font-bold mb-2">${title}</h3>
+                            <p class="text-gray-400">${description}</p>
+                        </div>
+                    `;
+                } else {
+                    // Real photo content (for future use)
+                    content = `
+                        <img src="${src}" alt="${title}" class="modal-image">
+                        <div class="modal-info">
+                            <h3 class="text-xl font-bold mb-2">${title}</h3>
+                            <p class="text-gray-400">${description}</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            modalBody.innerHTML = content;
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto'; // Restore scrolling
+            setTimeout(() => {
+                modalBody.innerHTML = '';
+            }, 300);
+        }
+
+        // Add click event listeners to all clickable items
+        document.querySelectorAll('.clickable-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const type = item.getAttribute('data-type');
+                const title = item.getAttribute('data-title');
+                const description = item.getAttribute('data-description');
+                const src = item.getAttribute('data-src');
+                openModal(type, title, description, src);
+            });
+        });
+
+        // Close modal events
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
+                closeModal();
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                // Close mobile menu and submenus on link click
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+                if (!mobileCareersSubmenu.classList.contains('hidden')) {
+                    mobileCareersSubmenu.classList.add('hidden');
+                    mobileCareersArrow.classList.remove('rotate-180');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
